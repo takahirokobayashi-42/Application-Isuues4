@@ -1,0 +1,51 @@
+<h1>Users info</h1>
+<!--photo image-->
+<%= attachment_image_tag @user_info, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" %>
+<table class="table">
+    <tr>
+        <td>name</td>
+        <td><%= @user_info.name %></td>
+    </tr>
+    <tr>
+        <td>introduction</td>
+        <td><%= @user_info.introduction %></td>
+    </tr>
+    <tr>
+        <td>followed</td>
+        <td>
+            <%= link_to followed_index_path(@user_info) do %>
+                <%= @user_info.followed.count %>
+            <% end %>
+        </td>
+    </tr>
+    <tr>
+        <td>follows</td>
+        <td>
+            <%= link_to follower_index_path(@user_info) do %>
+                <%= @user_info.follower.count %>
+            <% end %>
+        </td>
+    </tr>
+
+</table>
+<% if current_user == @user_info %>
+    <button type="button" class="btn btn-outline-secondary btn-lg btn-block">
+        <%= link_to edit_user_path(@user_info.id) do %>
+            <i class="fas fa-user-cog"></i>
+        <% end %>
+    </button>
+<% else %>
+     <button type="button" class="btn btn-primary">
+        <% if current_user.following?(@user_info) %>
+             <%= link_to unfollow_path(@user_info.id), method: :POST do %>
+             <p style="color: white; margin: 0 50px;">フォロー外す</p>
+             <% end %>
+        <% else %>
+          <%= link_to follow_path(@user_info.id), method: :POST do %>
+           <p style="color: white; margin: 0 50px;">フォローする</p>
+          <% end %>
+        <% end %>
+    </button>
+<% end %>
+
+
